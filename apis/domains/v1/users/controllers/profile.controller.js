@@ -6,12 +6,16 @@ class UserProfileController extends BaseResponseHandler {
     }
 
     async getUserProfileDetails(req, res) {
-        const userId = req.params.id;
-        //return res.status(200).json({ message: `User with ID ${userId} retrieved successfully` });
+        try {
+            const userId = req.params.id;
+            //return res.status(200).json({ message: `User with ID ${userId} retrieved successfully` });
 
-        return this.successResponse(res, {
-            message: `Profile Details with ID ${userId} retrieved successfully`,
-        });
+            return this.successResponse(res, {
+                message: `Profile Details with ID ${userId} retrieved successfully`,
+            });
+        } catch (error) {
+            console.log.log(error);
+        }
     }
 
     async updateUserProfileDetails(req, res) {
