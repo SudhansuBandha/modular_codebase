@@ -1,5 +1,5 @@
 const GenerateRoutesForController = require("../../../../shared/utils/generateRoutesForModule");
-const UsersController = require("../controllers");
+const { UsersController } = require("../controllers");
 const authMiddleware = require("../../../../shared/middlewares/auth.middleware");
 
 class UserRoutes extends GenerateRoutesForController {

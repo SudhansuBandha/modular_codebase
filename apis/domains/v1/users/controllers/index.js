@@ -1,2 +1,4 @@
 const UsersController = require("./users.controller");
-module.exports = UsersController;
+const UserProfileController = require("./profile.controller");
+
+module.exports = { UsersController, UserProfileController };
