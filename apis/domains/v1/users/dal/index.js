@@ -1,9 +1,9 @@
 const UsersFactory = require("./users.factory");
 
-const UsersManager = new UsersFactory();
+const dbManager = new UsersFactory();
 
 (async () => {
-  await UsersManager.write();
+  await dbManager.write();
 })();
 
 module.exports = { UsersFactory };

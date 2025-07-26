@@ -1,11 +1,11 @@
-const clients = require("../../.../../../../../db/mongo");
+const clients = require("../../../../../db/mongo");
 const CreateOrUpdateCollection = require("../../../../shared/utils/createOrUpdateCollection");
-const usersSchema = require("../schemas/users.schema");
+const clubsSchema = require("../schemas/clubs.schema");
 
-class UsersFactory extends CreateOrUpdateCollection {
+class ClubsFactory extends CreateOrUpdateCollection {
   constructor() {
-    super("users", usersSchema);
-    this.collectionName = "users";
+    super("clubs", clubsSchema);
+    this.collectionName = "clubs";
     this.dbClient = clients["clubs"].db();
     this.dbCollection = this.dbClient.collection(this.collectionName);
   }
@@ -14,16 +14,6 @@ class UsersFactory extends CreateOrUpdateCollection {
     try {
       const indexes = await this.dbCollection.indexes();
       const existingIndexNames = indexes.map((idx) => idx.name);
-
-      // Create unique index on "email" if not already present
-      if (!existingIndexNames.includes("email_1")) {
-        await this.dbCollection.createIndex({ email: 1 }, { unique: true });
-      }
-
-      // Create unique index on "phone" if not already present
-      if (!existingIndexNames.includes("phone_1")) {
-        await this.dbCollection.createIndex({ phone: 1 }, { unique: true });
-      }
     } catch (err) {
       console.error("Error creating unique indexes:", err.message);
     }
@@ -34,7 +24,7 @@ class UsersFactory extends CreateOrUpdateCollection {
       // First call the parent write method to create/update schema
       await super.write();
       // Now ensure unique indexes on email and phone
-      await this.ensureUniqueIndexes();
+      //await this.ensureUniqueIndexes();
     } catch (error) {
       console.log(error);
     }
@@ -42,10 +32,10 @@ class UsersFactory extends CreateOrUpdateCollection {
 
   async getAll() {
     try {
-      const users = await this.dbCollection.find({}).toArray();
-      return users;
+      const clubs = await this.dbCollection.find({}).toArray();
+      return clubs;
     } catch (error) {
-      console.error("Error retrieving users:", error);
+      console.error("Error retrieving clubs:", error);
       throw error;
     }
   }
@@ -71,4 +61,4 @@ class UsersFactory extends CreateOrUpdateCollection {
   }
 }
 
-module.exports = UsersFactory;
+module.exports = ClubsFactory;
