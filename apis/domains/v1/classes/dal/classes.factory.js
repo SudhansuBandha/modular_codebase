@@ -1,11 +1,11 @@
 const clients = require("../../../../../db/mongo");
 const CreateOrUpdateCollection = require("../../../../shared/utils/createOrUpdateCollection");
-const clubsSchema = require("../schemas/clubs.schema");
+const classesSchema = require("../schemas/classes.schema");
 
-class ClubsFactory extends CreateOrUpdateCollection {
+class ClassesFactory extends CreateOrUpdateCollection {
   constructor() {
-    super("clubs", clubsSchema);
-    this.collectionName = "clubs";
+    super("classes", classesSchema);
+    this.collectionName = "classes";
     this.dbClient = clients["clubs"].db();
     this.dbCollection = this.dbClient.collection(this.collectionName);
   }
@@ -31,8 +31,8 @@ class ClubsFactory extends CreateOrUpdateCollection {
 
   async getAll() {
     try {
-      const clubs = await this.dbCollection.find({}).toArray();
-      return clubs;
+      const classes = await this.dbCollection.find({}).toArray();
+      return classes;
     } catch (error) {
       console.error("Error retrieving clubs:", error);
       throw error;
@@ -60,4 +60,4 @@ class ClubsFactory extends CreateOrUpdateCollection {
   }
 }
 
-module.exports = ClubsFactory;
+module.exports = ClassesFactory;
