@@ -1,9 +1,12 @@
 const ClassesFactory = require("./classes.factory");
+const BookingsFactory = require("./bookings.factory");
 
-const dbManager = new ClassesFactory();
+const classesManager = new ClassesFactory();
+const bookingsManager = new BookingsFactory();
 
 (async () => {
-  await dbManager.write();
+  await classesManager.write();
+  await bookingsManager.write();
 })();
 
-module.exports = { ClassesFactory };
+module.exports = { ClassesFactory, BookingsFactory };

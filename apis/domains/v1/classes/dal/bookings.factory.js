@@ -1,12 +1,12 @@
 const clients = require("../../../../../db/mongo");
 const CreateOrUpdateCollection = require("../../../../shared/utils/createOrUpdateCollection");
-const classesSchema = require("../schemas/classes.schema");
+const bookingSchema = require("../schemas/bookings.schema");
 
-class ClassesFactory extends CreateOrUpdateCollection {
+class BookingFactory extends CreateOrUpdateCollection {
   constructor() {
     // super (schemaName, schema) is called in the parent class
-    super("classes", classesSchema);
-    this.collectionName = "classes";
+    super("bookings", bookingSchema);
+    this.collectionName = "bookings";
     this.dbClient = clients["clubs"].db();
     this.dbCollection = this.dbClient.collection(this.collectionName);
   }
@@ -32,8 +32,8 @@ class ClassesFactory extends CreateOrUpdateCollection {
 
   async getAll() {
     try {
-      const classes = await this.dbCollection.find({}).toArray();
-      return classes;
+      const bookings = await this.dbCollection.find({}).toArray();
+      return bookings;
     } catch (error) {
       console.error("Error retrieving clubs:", error);
       throw error;
@@ -61,4 +61,4 @@ class ClassesFactory extends CreateOrUpdateCollection {
   }
 }
 
-module.exports = ClassesFactory;
+module.exports = BookingFactory;

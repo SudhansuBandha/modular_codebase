@@ -4,6 +4,7 @@ const usersSchema = require("../schemas/users.schema");
 
 class UsersFactory extends CreateOrUpdateCollection {
   constructor() {
+    // super (schemaName, schema) is called in the parent class
     super("users", usersSchema);
     this.collectionName = "users";
     this.dbClient = clients["clubs"].db();
