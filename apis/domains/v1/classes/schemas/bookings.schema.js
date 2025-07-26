@@ -8,13 +8,13 @@ module.exports = {
           bsonType: "objectId",
           description: "Reference to the User who made the booking",
         },
-        classId: {
+        class: {
           bsonType: "objectId",
           description: "Reference to the Class being booked",
         },
-        participationDate: {
-          bsonType: "date",
-          description: "Date when the member will participate",
+        session: {
+          bsonType: "objectId",
+          description: "Reference to the Session being booked",
         },
       },
     },

@@ -37,24 +37,23 @@ module.exports = {
         capacity: {
           bsonType: "int",
           minimum: 1,
-          maximum: 10,
-          description: "Capacity must be a positive integer between 1 and 10",
+          description: "Capacity must be a positive integer and at least 1",
         },
-        clubId: {
+        club: {
           bsonType: "objectId",
           description: "Must reference a valid Club _id",
+        },
+        sessions: {
+          bsonType: "array",
+          description: "List of sessions for this class",
+          items: {
+            bsonType: "objectId",
+          },
+          uniqueItems: true,
         },
         createdBy: {
           bsonType: "objectId",
           description: "Must reference a valid User _id",
-        },
-        participants: {
-          bsonType: "array",
-          items: {
-            bsonType: "objectId",
-          },
-          maxItems: 10,
-          description: "List of user IDs who are members of the class",
         },
       },
     },
