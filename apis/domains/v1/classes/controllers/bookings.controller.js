@@ -8,6 +8,20 @@ class BookingsController extends BaseResponseHandler {
     super();
   }
 
+  async createBooking(req, res) {
+    try {
+      const bookingData = req.body;
+      const newBooking = await dbManager.create(bookingData);
+
+      return this.successResponse(res, {
+        message: "Booking created successfully",
+        data: newBooking,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getBookings(req, res) {
     try {
       const bookings = await dbManager.getAll();

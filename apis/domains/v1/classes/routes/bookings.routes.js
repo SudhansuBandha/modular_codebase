@@ -7,6 +7,17 @@ class BookingsRoutes extends GenerateRoutesForController {
     super();
   }
 
+  createBooking() {
+    return {
+      method: "POST",
+      path: "/:classid/bookings",
+      middlewares: [authMiddleware],
+      handler: (req, res) => {
+        BookingsController.createBooking(req, res);
+      },
+    };
+  }
+
   getBookings() {
     return {
       method: "GET",
