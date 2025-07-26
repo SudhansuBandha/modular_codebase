@@ -1,0 +1,57 @@
+const clubs = [
+  {
+    name: "Iron Paradise",
+    owners: ["Mr.A", "Ms.B"],
+    members: [
+      "Mr.C",
+      "Ms.D",
+      "Mr.E",
+      "Ms.F",
+      "Mr.G",
+      "Ms.H",
+      "Mr.I",
+      "Ms.J",
+      "Mr.K",
+      "Ms.L",
+    ],
+  },
+  {
+    name: "Yoga Bliss",
+    owners: ["Mr.EE"],
+    members: [
+      "Ms.FF",
+      "Mr.GG",
+      "Ms.HH",
+      "Mr.II",
+      "Ms.JJ",
+      "Mr.U",
+      "Ms.V",
+      "Mr.W",
+      "Ms.X",
+      "Mr.Y",
+      "Ms.Z",
+    ],
+  },
+  {
+    name: "Cardio Kings",
+    owners: ["Ms.JJ"],
+    members: [
+      "Mr.AA",
+      "Ms.BB",
+      "Mr.CC",
+      "Ms.DD",
+      "Mr.EE",
+      "Mr.KK",
+      "Ms.LL",
+      "Ms.PP",
+      "Mr.QQ",
+      "Ms.RR",
+      "Mr.SS",
+      "Ms.TT",
+      "Mr.UU",
+      "Ms.VV",
+    ],
+  },
+];
+
+module.exports = clubs;
