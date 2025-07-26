@@ -35,7 +35,17 @@ class ClassesFactory extends CreateOrUpdateCollection {
       const classes = await this.dbCollection.find({}).toArray();
       return classes;
     } catch (error) {
-      console.error("Error retrieving clubs:", error);
+      console.error("Error retrieving class:", error);
+      throw error;
+    }
+  }
+
+  async getById(id) {
+    try {
+      const data = await this.dbCollection.findOne({ _id: id });
+      return data;
+    } catch (error) {
+      console.error(`Error retrieving ${this.collectionName} by ID:`, error);
       throw error;
     }
   }
@@ -43,9 +53,41 @@ class ClassesFactory extends CreateOrUpdateCollection {
   async createOne(data) {
     try {
       const result = await this.dbCollection.insertOne(data);
-      return result.ops[0];
+
+      return result.insertedId;
     } catch (error) {
-      console.error("Error creating user:", error);
+      if (error.code === 121) {
+        const details = error.errInfo?.details?.schemaRulesNotSatisfied || [];
+        console.error("Validation failed on fields:");
+        details.forEach((rule) => {
+          (rule.propertiesNotSatisfied || []).forEach(
+            ({ propertyName, ...info }) => {
+              console.error(`- ${propertyName}:`, info);
+            }
+          );
+        });
+      } else {
+        console.error("Error creating class:", error);
+      }
+      throw error;
+    }
+  }
+
+  async updateOne(id, data) {
+    try {
+      const result = await this.dbCollection.updateOne(
+        { _id: id },
+        {
+          $set: {
+            ...data,
+            updatedAt: new Date(),
+          },
+        }
+      );
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error updating class:", error);
       throw error;
     }
   }
@@ -55,7 +97,7 @@ class ClassesFactory extends CreateOrUpdateCollection {
       const result = await this.dbCollection.insertMany(data);
       return result.insertedCount;
     } catch (error) {
-      console.error("Error creating users:", error);
+      console.error("Error creating class:", error);
       throw error;
     }
   }

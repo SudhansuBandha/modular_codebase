@@ -9,8 +9,9 @@ module.exports = {
         "startTime",
         "duration",
         "capacity",
-        "clubId",
-        "createdBy",
+        "club",
+        "createdAt",
+        "updatedAt",
       ],
       properties: {
         name: {
@@ -18,11 +19,11 @@ module.exports = {
           description: "Class name must be a string and is required",
         },
         startDate: {
-          bsonType: "date",
+          bsonType: "string",
           description: "Start date must be a valid date",
         },
         endDate: {
-          bsonType: "date",
+          bsonType: "string",
           description: "End date must be a valid date",
         },
         startTime: {
@@ -51,9 +52,13 @@ module.exports = {
           },
           uniqueItems: true,
         },
-        createdBy: {
-          bsonType: "objectId",
-          description: "Must reference a valid User _id",
+        createdAt: {
+          bsonType: "date",
+          description: "Document creation timestamp",
+        },
+        updatedAt: {
+          bsonType: "date",
+          description: "Document last update timestamp",
         },
       },
     },

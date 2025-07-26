@@ -30,6 +30,16 @@ class SessionFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async getById(id) {
+    try {
+      const data = await this.dbCollection.findOne({ _id: id });
+      return data;
+    } catch (error) {
+      console.error(`Error retrieving ${this.collectionName} by ID:`, error);
+      throw error;
+    }
+  }
+
   async getAll() {
     try {
       const sessions = await this.dbCollection.find({}).toArray();
@@ -53,9 +63,31 @@ class SessionFactory extends CreateOrUpdateCollection {
   async createMany(data) {
     try {
       const result = await this.dbCollection.insertMany(data);
-      return result.insertedCount;
+      return result.insertedIds;
     } catch (error) {
-      console.error("Error creating users:", error);
+      if (error.name === "BulkWriteError" && Array.isArray(error.writeErrors)) {
+        console.error("Validation failed for some documents:");
+        error.writeErrors.forEach((writeErr, index) => {
+          const errDetails =
+            writeErr.err &&
+            writeErr.err.errInfo?.details?.schemaRulesNotSatisfied;
+          console.error(`Error at document index ${writeErr.index}:`);
+          if (errDetails) {
+            errDetails.forEach((rule) => {
+              (rule.propertiesNotSatisfied || []).forEach(
+                ({ propertyName, ...info }) => {
+                  console.error(`- ${propertyName}:`, info);
+                }
+              );
+            });
+          } else {
+            console.error(writeErr.err?.errmsg || writeErr);
+          }
+        });
+      } else {
+        console.error("Error creating class:", error);
+      }
+
       throw error;
     }
   }

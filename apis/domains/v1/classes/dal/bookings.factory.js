@@ -40,6 +40,16 @@ class BookingFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async getById(id) {
+    try {
+      const data = await this.dbCollection.findOne({ _id: id });
+      return data;
+    } catch (error) {
+      console.error(`Error retrieving ${this.collectionName} by ID:`, error);
+      throw error;
+    }
+  }
+
   async createOne(data) {
     try {
       const result = await this.dbCollection.insertOne(data);
