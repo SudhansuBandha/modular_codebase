@@ -10,7 +10,7 @@ class UserController extends BaseResponseHandler {
 
   async getUsers(req, res) {
     try {
-      const users = await UsersManager.getAllUsers();
+      const users = await UsersManager.getAll();
 
       return this.successResponse(res, {
         message: "Users retrieved successfully",

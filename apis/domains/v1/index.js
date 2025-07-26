@@ -1,8 +1,5 @@
-const UsersModuleRouterData = require('./users');
-const OrdersModuleRouterData = require('./orders');
-
+const UsersModuleRouterData = require("./users");
 
 module.exports = {
-    UsersModuleRouterData,
-    OrdersModuleRouterData
-};  
+  UsersModuleRouterData,
+};

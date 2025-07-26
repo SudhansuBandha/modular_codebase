@@ -4,7 +4,7 @@ export const db = {
     clubs: {
       host: "localhost",
       port: 27017,
-      dbName: "labx_prod",
+      dbName: "clubs",
     },
   },
 };
