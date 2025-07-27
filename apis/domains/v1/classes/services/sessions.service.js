@@ -18,7 +18,6 @@ class SessionsService {
 
     // convert to array of ids
     sessionIds = Object.values(sessionIds);
-    console.log(sessionIds);
 
     return sessionIds;
   }

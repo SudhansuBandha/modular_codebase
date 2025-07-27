@@ -85,7 +85,7 @@ class SessionFactory extends CreateOrUpdateCollection {
           },
         }
       );
-      console.log(result);
+
       return result;
     } catch (error) {
       console.error("Error updating class:", error);
@@ -106,7 +106,7 @@ class SessionFactory extends CreateOrUpdateCollection {
           },
         }
       );
-      console.log(result);
+
       return result;
     } catch (error) {
       console.error("Error updating class:", error);

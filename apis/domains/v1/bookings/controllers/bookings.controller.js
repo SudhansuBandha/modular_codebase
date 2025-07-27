@@ -50,8 +50,8 @@ class BookingsController extends BaseResponseHandler {
         queryObj.member = ObjectId.createFromHexString(req.query.memberId);
       if (req.query.startDate && req.query.endDate) {
         queryObj.participationDate = {
-          $gte: req.query.params.startDate,
-          $lte: req.query.params.endDate,
+          $gte: req.query.startDate,
+          $lte: req.query.endDate,
         };
       }
       queryObj.class = {

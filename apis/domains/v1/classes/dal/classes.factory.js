@@ -126,7 +126,7 @@ class ClassesFactory extends CreateOrUpdateCollection {
           },
         }
       );
-      console.log(result);
+
       return result;
     } catch (error) {
       console.error("Error updating class:", error);

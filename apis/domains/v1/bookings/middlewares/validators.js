@@ -71,7 +71,7 @@ class Validator {
           errors.push("Participation date must be in the future.");
         }
 
-        if (participation <= classStartDate || participation >= classEndDate) {
+        if (participation < classStartDate || participation > classEndDate) {
           errors.push(
             "Participation date must be after Starting Date and before Ending Date ."
           );
@@ -135,6 +135,13 @@ class Validator {
         error: "provide ownerId in query params",
       });
     }
+
+    if (new Date(req.query.startDate) > new Date(req.query.endDate)) {
+      res.status(400).json({
+        error: "start date can not be greater than end date",
+      });
+    }
+
     const ownerId = ObjectId.createFromHexString(req.query.ownerId);
     const ownersClub = await clubsManager.fetchMyClub(ownerId);
 
@@ -151,7 +158,7 @@ class Validator {
     // this is not perfect since no proper auth mechanism is there
     // we are assuming no two clubs have same owners
     const ownerClubDetails = req.ownerClubDetails;
-    console.log(ownerClubDetails);
+
     if (req.query.memberId) {
       if (
         ownerClubDetails.members.findIndex((id) =>
