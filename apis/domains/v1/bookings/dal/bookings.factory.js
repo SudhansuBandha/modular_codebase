@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const clients = require("../../../../../db/mongo");
 const CreateOrUpdateCollection = require("../../../../shared/utils/createOrUpdateCollection");
 const bookingSchema = require("../schemas/bookings.schema");
@@ -65,10 +66,31 @@ class BookingFactory extends CreateOrUpdateCollection {
 
   async createOne(data) {
     try {
-      const result = await this.dbCollection.insertOne(data);
-      return result.ops[0];
+      let saveData = {
+        member: data.member,
+        class: ObjectId.createFromHexString(data.classId),
+        participationDate: data.participationDate,
+        session: data.session,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const result = await this.dbCollection.insertOne(saveData);
+      return result.insertedId;
     } catch (error) {
-      console.error("Error creating user:", error);
+      if (error.code === 121) {
+        const details = error.errInfo?.details?.schemaRulesNotSatisfied || [];
+        console.error("Validation failed on fields:");
+        details.forEach((rule) => {
+          (rule.propertiesNotSatisfied || []).forEach(
+            ({ propertyName, ...info }) => {
+              console.error(`- ${propertyName}:`, info);
+            }
+          );
+        });
+      } else {
+        console.error("Error creating class:", error);
+      }
       throw error;
     }
   }

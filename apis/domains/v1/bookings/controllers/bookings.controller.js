@@ -1,7 +1,11 @@
 const BaseResponseHandler = require("../../../../shared/utils/baseResponseHandler");
 const { BookingsFactory } = require("../dal");
+const { SessionsFactory } = require("../../classes/dal");
+
 const bookingsHelper = require("../helpers/bookings.helper");
-const dbManager = new BookingsFactory();
+
+const bookingsManager = new BookingsFactory();
+const sessionsManager = new SessionsFactory();
 
 class BookingsController extends BaseResponseHandler {
   constructor() {
@@ -10,13 +14,22 @@ class BookingsController extends BaseResponseHandler {
 
   async createBooking(req, res) {
     try {
-      const bookingData = req.body;
+      let bookingData = req.body;
+      bookingData = {
+        ...bookingData,
+        member: req.user._id,
+        session: req.sessionDetails._id,
+      };
 
-      //const newBooking = await dbManager.create(bookingData);
+      //Create Booking
+      const newBooking = await bookingsManager.createOne(bookingData);
+
+      //Add Booking Id to  Session
+      await sessionsManager.addParticipant(req.sessionDetails._id, newBooking);
 
       return this.successResponse(res, {
         message: "Booking created successfully",
-        data: bookingData,
+        data: newBooking,
       });
     } catch (error) {
       console.log(error);

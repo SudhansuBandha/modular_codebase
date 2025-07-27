@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const clients = require("../../../../../db/mongo");
 const CreateOrUpdateCollection = require("../../../../shared/utils/createOrUpdateCollection");
 const sessionSchema = require("../schemas/sessions.schema");
@@ -69,6 +70,46 @@ class SessionFactory extends CreateOrUpdateCollection {
       return result.ops[0];
     } catch (error) {
       console.error("Error creating user:", error);
+      throw error;
+    }
+  }
+
+  async updateOne(id, data) {
+    try {
+      const result = await this.dbCollection.updateOne(
+        { _id: id },
+        {
+          $set: {
+            ...data,
+            updatedAt: new Date(),
+          },
+        }
+      );
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error updating class:", error);
+      throw error;
+    }
+  }
+
+  async addParticipant(id, data) {
+    try {
+      const result = await this.dbCollection.updateOne(
+        { _id: id },
+        {
+          $addToSet: {
+            participants: data,
+          },
+          $set: {
+            updatedAt: new Date(),
+          },
+        }
+      );
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.error("Error updating class:", error);
       throw error;
     }
   }

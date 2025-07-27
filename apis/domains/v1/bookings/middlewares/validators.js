@@ -69,7 +69,7 @@ class Validator {
           errors.push("Participation date must be in the future.");
         }
 
-        if (participation < classStartDate || participation > classEndDate) {
+        if (participation <= classStartDate || participation >= classEndDate) {
           errors.push(
             "Participation date must be after Starting Date and before Ending Date ."
           );
@@ -87,18 +87,20 @@ class Validator {
 
   async checkDuplicateBooking(req, res, next) {
     const { name, classId, participationDate } = req.body;
-    const classDetails = req.classDetails;
+
     const user = req.user;
 
     // Check for duplicate booking
     const sessionDetails = await sessionManager.findOne({
-      class: classId,
-      participationDate: participationDate,
+      // coming from req body
+      class: ObjectId.createFromHexString(classId),
+      date: participationDate,
     });
 
     const existingBooking = await bookingsManager.findOne({
       member: user._id,
-      class: classId,
+      // coming from req body
+      class: ObjectId.createFromHexString(classId),
       session: sessionDetails._id,
     });
 
@@ -115,9 +117,9 @@ class Validator {
     const classDetails = req.classDetails;
     const sessionDetails = req.sessionDetails;
 
-    if (sessionDetails.participants.length === classDetails.capacity)
+    if (sessionDetails.participants?.length === classDetails.capacity)
       res.status(409).json({
-        error: "No available capacity for this class.",
+        error: "No available capacity for this class on this day.",
       });
 
     next();

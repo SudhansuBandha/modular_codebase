@@ -6,6 +6,7 @@ module.exports = {
         "member",
         "class",
         "participationDate",
+        "session",
         "createdAt",
         "updatedAt",
       ],
