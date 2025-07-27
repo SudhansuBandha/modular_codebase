@@ -1,6 +1,6 @@
 const BaseResponseHandler = require("../../../../shared/utils/baseResponseHandler");
 const { BookingsFactory } = require("../dal");
-
+const bookingsHelper = require("../helpers/bookings.helper");
 const dbManager = new BookingsFactory();
 
 class BookingsController extends BaseResponseHandler {
@@ -11,11 +11,12 @@ class BookingsController extends BaseResponseHandler {
   async createBooking(req, res) {
     try {
       const bookingData = req.body;
-      const newBooking = await dbManager.create(bookingData);
+
+      //const newBooking = await dbManager.create(bookingData);
 
       return this.successResponse(res, {
         message: "Booking created successfully",
-        data: newBooking,
+        data: bookingData,
       });
     } catch (error) {
       console.log(error);

@@ -50,6 +50,48 @@ class ClassesFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async getClassAndClubDetails(id) {
+    try {
+      const data = await this.dbCollection
+        .aggregate([
+          {
+            $match: {
+              _id: id,
+            },
+          },
+          {
+            $lookup: {
+              from: "clubs",
+              localField: "club",
+              foreignField: "_id",
+              as: "club",
+            },
+          },
+          {
+            $unwind: {
+              path: "$club",
+            },
+          },
+          {
+            $project: {
+              name: 1,
+              startDate: 1,
+              endDate: 1,
+              capacity: 1,
+              owners: "$club.owners",
+              members: "$club.members",
+            },
+          },
+        ])
+        .toArray();
+
+      return data;
+    } catch (error) {
+      console.error(`Error retrieving ${this.collectionName} by ID:`, error);
+      throw error;
+    }
+  }
+
   async createOne(data) {
     try {
       const result = await this.dbCollection.insertOne(data);

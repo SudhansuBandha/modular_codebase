@@ -1,6 +1,7 @@
 const GenerateRoutesForController = require("../../../../shared/utils/generateRoutesForModule");
 const { BookingsController } = require("../controllers");
 const authMiddleware = require("../../../../shared/middlewares/auth.middleware");
+const Validator = require("../middlewares/validators");
 
 class BookingsRoutes extends GenerateRoutesForController {
   constructor() {
@@ -10,8 +11,13 @@ class BookingsRoutes extends GenerateRoutesForController {
   createBooking() {
     return {
       method: "POST",
-      path: "/:classid/bookings",
-      middlewares: [authMiddleware],
+      path: "/",
+      middlewares: [
+        authMiddleware,
+        Validator.validateBooking,
+        Validator.checkDuplicateBooking,
+        Validator.checkForCapacity,
+      ],
       handler: (req, res) => {
         BookingsController.createBooking(req, res);
       },

@@ -40,6 +40,19 @@ class SessionFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async findOne(query) {
+    try {
+      const data = await this.dbCollection.findOne(query);
+      return data;
+    } catch (error) {
+      console.error(
+        `Error retrieving ${this.collectionName} by details:`,
+        error
+      );
+      throw error;
+    }
+  }
+
   async getAll() {
     try {
       const sessions = await this.dbCollection.find({}).toArray();

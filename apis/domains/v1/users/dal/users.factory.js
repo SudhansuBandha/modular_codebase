@@ -51,6 +51,19 @@ class UsersFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async findOne(query) {
+    try {
+      const data = await this.dbCollection.findOne(query);
+      return data;
+    } catch (error) {
+      console.error(
+        `Error retrieving ${this.collectionName} by details:`,
+        error
+      );
+      throw error;
+    }
+  }
+
   async createOne(data) {
     try {
       const result = await this.dbCollection.insertOne(data);

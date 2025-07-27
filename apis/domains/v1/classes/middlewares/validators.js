@@ -1,5 +1,6 @@
 class Validator {
   validateCreateClass(req, res, next) {
+    //validate request body
     const errors = [];
     console.log("Validating class creation:", req.body);
     const { name, startDate, endDate, startTime, duration, capacity, club } =
