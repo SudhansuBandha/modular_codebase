@@ -31,9 +31,29 @@ class BookingFactory extends CreateOrUpdateCollection {
     }
   }
 
-  async getAll() {
+  async getAll(query) {
     try {
-      const bookings = await this.dbCollection.find({}).toArray();
+      const bookings = await this.dbCollection
+        .aggregate([
+          {
+            $match: query,
+          },
+          {
+            $lookup: {
+              from: "classes",
+              localField: "class",
+              foreignField: "_id",
+              as: "class",
+            },
+          },
+          {
+            $unwind: {
+              path: "$class",
+            },
+          },
+        ])
+        .toArray();
+
       return bookings;
     } catch (error) {
       console.error("Error retrieving clubs:", error);

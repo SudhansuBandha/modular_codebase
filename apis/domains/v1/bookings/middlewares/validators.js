@@ -2,11 +2,13 @@ const { ObjectId } = require("mongodb");
 const { ClassesFactory, SessionsFactory } = require("../../classes/dal");
 const { UsersFactory } = require("../../users/dal");
 const { BookingsFactory } = require("../dal");
+const { ClubsFactory } = require("../../clubs/dal");
 
 const classManager = new ClassesFactory();
 const usersManager = new UsersFactory();
 const bookingsManager = new BookingsFactory();
 const sessionManager = new SessionsFactory();
+const clubsManager = new ClubsFactory();
 
 class Validator {
   async validateBooking(req, res, next) {
@@ -117,11 +119,50 @@ class Validator {
     const classDetails = req.classDetails;
     const sessionDetails = req.sessionDetails;
 
-    if (sessionDetails.participants?.length === classDetails.capacity)
+    if (sessionDetails.participants?.length >= classDetails.capacity)
       res.status(409).json({
         error: "No available capacity for this class on this day.",
       });
 
+    next();
+  }
+
+  async validateClubOwner(req, res, next) {
+    // this is not perfect since no proper auth mechanism is there
+    // we are assuming no two clubs have same owners
+    if (!req.query.ownerId) {
+      res.status(400).json({
+        error: "provide ownerId in query params",
+      });
+    }
+    const ownerId = ObjectId.createFromHexString(req.query.ownerId);
+    const ownersClub = await clubsManager.fetchMyClub(ownerId);
+
+    if (!ownersClub)
+      res.status(400).json({
+        error: "Not the owner of club",
+      });
+
+    req.ownerClubDetails = ownersClub[0];
+    next();
+  }
+
+  async validateClubMember(req, res, next) {
+    // this is not perfect since no proper auth mechanism is there
+    // we are assuming no two clubs have same owners
+    const ownerClubDetails = req.ownerClubDetails;
+    console.log(ownerClubDetails);
+    if (req.query.memberId) {
+      if (
+        ownerClubDetails.members.findIndex((id) =>
+          id.equals(req.query.memberId)
+        ) === -1
+      ) {
+        res.status(400).json({
+          error: "Not the member of club",
+        });
+      }
+    }
     next();
   }
 }

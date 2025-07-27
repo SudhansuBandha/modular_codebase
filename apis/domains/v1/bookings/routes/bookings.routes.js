@@ -28,7 +28,11 @@ class BookingsRoutes extends GenerateRoutesForController {
     return {
       method: "GET",
       path: "/",
-      middlewares: [authMiddleware],
+      middlewares: [
+        authMiddleware,
+        Validator.validateClubOwner,
+        Validator.validateClubMember,
+      ],
       handler: BookingsController.getBookings.bind(BookingsController),
     };
   }

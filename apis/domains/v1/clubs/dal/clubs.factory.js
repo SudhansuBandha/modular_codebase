@@ -40,6 +40,20 @@ class ClubsFactory extends CreateOrUpdateCollection {
     }
   }
 
+  async fetchMyClub(data) {
+    try {
+      const clubs = await this.dbCollection
+        .find({
+          owners: { $in: [data] },
+        })
+        .toArray();
+      return clubs;
+    } catch (error) {
+      console.error("Error retrieving clubs:", error);
+      throw error;
+    }
+  }
+
   async createOne(data) {
     try {
       const result = await this.dbCollection.insertOne(data);

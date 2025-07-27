@@ -1,9 +1,9 @@
+const { ObjectId } = require("mongodb");
 const BaseResponseHandler = require("../../../../shared/utils/baseResponseHandler");
 const { BookingsFactory } = require("../dal");
-const { SessionsFactory } = require("../../classes/dal");
+const { ClassesFactory, SessionsFactory } = require("../../classes/dal");
 
-const bookingsHelper = require("../helpers/bookings.helper");
-
+const classesManager = new ClassesFactory();
 const bookingsManager = new BookingsFactory();
 const sessionsManager = new SessionsFactory();
 
@@ -38,7 +38,26 @@ class BookingsController extends BaseResponseHandler {
 
   async getBookings(req, res) {
     try {
-      const bookings = await dbManager.getAll();
+      const classesForClub = await classesManager.getAll({
+        club: req.ownerClubDetails._id,
+      });
+
+      let classesIds = classesForClub.map((cl) => cl._id);
+
+      let queryObj = {};
+
+      if (req.query.memberId)
+        queryObj.member = ObjectId.createFromHexString(req.query.memberId);
+      if (req.query.startDate && req.query.endDate) {
+        queryObj.participationDate = {
+          $gte: req.query.params.startDate,
+          $lte: req.query.params.endDate,
+        };
+      }
+      queryObj.class = {
+        $in: classesIds,
+      };
+      const bookings = await bookingsManager.getAll(queryObj);
 
       return this.successResponse(res, {
         message: "Booking retrieved successfully",

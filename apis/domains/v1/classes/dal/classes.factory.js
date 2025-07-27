@@ -30,9 +30,9 @@ class ClassesFactory extends CreateOrUpdateCollection {
     }
   }
 
-  async getAll() {
+  async getAll(query) {
     try {
-      const classes = await this.dbCollection.find({}).toArray();
+      const classes = await this.dbCollection.find(query).toArray();
       return classes;
     } catch (error) {
       console.error("Error retrieving class:", error);
